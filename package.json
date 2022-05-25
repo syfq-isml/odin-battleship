@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test-ship": "jest shipFactory.test.js",
+    "tship": "jest shipFactory.test.js",
+    "tgame": "jest gameboardFactory.test.js",
     "build": "webpack",
     "dev": "webpack serve",
     "watch": "webpack --watch"
