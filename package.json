@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test-ship": "jest shipFactory.test.js",
     "build": "webpack",
     "dev": "webpack serve",
     "watch": "webpack --watch"
