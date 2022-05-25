@@ -1,5 +1,8 @@
+import { uuid } from "uuidv4";
+
 const Ship = function (length) {
 	let _length = length;
+	let _name = uuid();
 
 	let _shipArray = [];
 	for (let i = 0; i < length; i++) {
@@ -19,6 +22,9 @@ const Ship = function (length) {
 	return {
 		get length() {
 			return _length;
+		},
+		get name() {
+			return _name;
 		},
 		get shipArray() {
 			return _shipArray;
