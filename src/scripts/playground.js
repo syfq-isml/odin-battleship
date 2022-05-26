@@ -1,3 +1,33 @@
+const Ship = function (length) {
+	let _length = length;
+
+	let _shipArray = [];
+	for (let i = 0; i < length; i++) {
+		_shipArray.push(" ");
+	}
+
+	const hit = (index) => {
+		if (index < 0 || index > length) throw "Invalid position hit";
+		_shipArray.splice(index, 1, "x");
+	};
+
+	const isSunk = () => {
+		if (_shipArray.every((slot) => slot === "x")) return true;
+		return false;
+	};
+
+	return {
+		get length() {
+			return _length;
+		},
+		get shipArray() {
+			return _shipArray;
+		},
+		hit,
+		isSunk,
+	};
+};
+
 const gameboard = function () {
 	let _board = [];
 
@@ -5,7 +35,6 @@ const gameboard = function () {
 		return {
 			isShip,
 			shipName,
-			shipIndex: null,
 			position: [x, y],
 			status: "not hit yet",
 		};
@@ -49,34 +78,28 @@ const gameboard = function () {
 		// given x, y coords, set ship to position on the gameboard
 		// coords start with [0,0]
 
+		// check for invalid ship positions
+		// horizontal
+		if (x + shipObj.length - 1 > 9 || y > 9 || y < 0)
+			throw "Out of bounds! (Horizontal)";
+		if (x < 0 || x > 9 || y + shipObj.length - 1 > 9)
+			throw "Out of bounds! (Vertical)";
 		if (_isShipTiles(x, y, shipObj.length, orientation))
 			throw "Already has a ship on one of the tiles!";
 
 		// horizontal placement of ships
 		if (orientation === "horizontal") {
-			if (y + shipObj.length - 1 > 9 || y > 9 || y < 0)
-				throw "Out of bounds! (Horizontal)";
-
-			let indexCounter = 0;
-			for (let j = y; j < y + shipObj.length; j++) {
+			for (let j = y; j < shipObj.length; j++) {
 				_board[x][j].isShip = true;
 				_board[x][j].shipName = shipObj.name;
-				_board[x][j].shipIndex = indexCounter;
-				indexCounter++;
 			}
 		}
 
 		// vertical placement of ships
 		else if (orientation === "vertical") {
-			if (x < 0 || x > 9 || x + shipObj.length - 1 > 9)
-				throw "Out of bounds! (Vertical)";
-
-			let indexCounter = 0;
-			for (let i = x; i < x + shipObj.length; i++) {
+			for (let i = x; i < shipObj.length; i++) {
 				_board[i][y].isShip = true;
 				_board[i][y].shipName = shipObj.name;
-				_board[i][y].shipIndex = indexCounter;
-				indexCounter++;
 			}
 		}
 		_addShipIntoArr(shipObj);
@@ -93,7 +116,7 @@ const gameboard = function () {
 			const shipHit = _allShips.find(
 				(ship) => ship.name === _board[x][y].shipName
 			);
-			shipHit.hit(_board[x][y].shipIndex);
+			shipHit.hit(x, y);
 			_board[x][y].status = "A ship was hit!";
 		} else {
 			_board[x][y].status = "Missed...";
@@ -114,7 +137,11 @@ const gameboard = function () {
 		placeShipOnGameboard,
 		receiveAttack,
 		isAllSunk,
+		_isShipTiles,
 	};
 };
 
-export { gameboard };
+const player = gameboard();
+
+const twoShip = Ship(2);
+player.placeShipOnGameboard(twoShip, 0, 3, "vertical");

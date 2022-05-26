@@ -30,7 +30,7 @@ describe("Ship placement shenanigans", () => {
 		).toThrow();
 		expect(() =>
 			player.placeShipOnGameboard(twoShip, 7, 9, "vertical")
-		).toThrow();
+		).not.toThrow();
 	});
 	test("does not place a ship when already has a ship", () => {
 		const player = gameboard();
@@ -47,19 +47,6 @@ describe("Ship placement shenanigans", () => {
 			player.placeShipOnGameboard(threeShip, 1, 1, "horizontal")
 		).toThrow();
 	});
-});
-
-test("ship tiles", () => {
-	const player = gameboard();
-	const twoShip = Ship(2);
-	player.placeShipOnGameboard(twoShip, 0, 3, "vertical");
-	expect(player.board[0][3].isShip).toBe(true);
-	expect(player.board[1][3].isShip).toBe(true);
-	expect(player._isShipTiles(0, 3, 3, "horizontal")).toBe(true);
-	expect(player._isShipTiles(1, 3, 3, "horizontal")).toBe(true);
-	// expect(player._isShipTiles(0, 4, 3, "horizontal")).toBe(false);
-	expect(player._isShipTiles(5, 5, 3, "horizontal")).toBe(false);
-	expect(player._isShipTiles(1, 1, 2, "horizontal")).toBe(true);
 });
 // 	test("Places ship horizontally", () => {
 // 		const player = gameboard();
@@ -166,14 +153,51 @@ describe("isAllSunk?", () => {
 
 	test("works properly with multiple ships present", () => {
 		const player = gameboard();
-		const ship1 = Ship(2);
-		const ship2 = Ship(2);
-		const ship3 = Ship(2);
+		const ship1 = Ship(1);
+		const ship2 = Ship(1);
+		const ship3 = Ship(1);
 		player.placeShipOnGameboard(ship1, 0, 0, "vertical");
-		player.placeShipOnGameboard(ship2, 0, 0, "horizontal");
-		player.placeShipOnGameboard(ship1, 0, 0, "vertical");
+		player.placeShipOnGameboard(ship2, 0, 1, "vertical");
+		player.placeShipOnGameboard(ship3, 0, 2, "vertical");
 		player.receiveAttack(0, 0);
-		player.receiveAttack(1, 0);
+		player.receiveAttack(0, 1);
+		player.receiveAttack(0, 2);
 		expect(player.isAllSunk()).toBe(true);
+	});
+
+	test("works properly with multiple ships present (2)", () => {
+		const player = gameboard();
+		const ship1 = Ship(2);
+		const ship2 = Ship(3);
+		const ship3 = Ship(4);
+		player.placeShipOnGameboard(ship1, 3, 0, "vertical");
+		player.placeShipOnGameboard(ship2, 5, 3, "horizontal");
+		player.placeShipOnGameboard(ship3, 8, 6, "horizontal");
+		player.receiveAttack(3, 0);
+		player.receiveAttack(4, 0);
+		player.receiveAttack(5, 3);
+		player.receiveAttack(5, 4);
+		player.receiveAttack(5, 5);
+		player.receiveAttack(8, 6);
+		player.receiveAttack(8, 7);
+		player.receiveAttack(8, 8);
+		player.receiveAttack(8, 9);
+		expect(player.isAllSunk()).toBe(true);
+	});
+
+	test("multiple ships present, not all are sunk", () => {
+		const player = gameboard();
+		const ship1 = Ship(2);
+		const ship2 = Ship(3);
+		const ship3 = Ship(4);
+		player.placeShipOnGameboard(ship1, 3, 0, "vertical");
+		player.placeShipOnGameboard(ship2, 5, 3, "horizontal");
+		player.placeShipOnGameboard(ship3, 8, 6, "horizontal");
+		player.receiveAttack(3, 0);
+		player.receiveAttack(4, 0);
+		player.receiveAttack(5, 3);
+		player.receiveAttack(8, 8);
+		player.receiveAttack(8, 9);
+		expect(player.isAllSunk()).toBe(false);
 	});
 });
