@@ -97,10 +97,10 @@ const gameboard = function () {
 			);
 			shipHit.hit(_board[x][y].shipIndex);
 			_board[x][y].status = "A ship was hit!";
-			return "A ship was hit!";
+			return _board[x][y].status;
 		} else {
 			_board[x][y].status = "Missed...";
-			return "Missed...";
+			return _board[x][y].status;
 		}
 	};
 

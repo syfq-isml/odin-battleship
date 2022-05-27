@@ -23,9 +23,11 @@ const computerPlayer = (function () {
 		const status = gameboard.board[x][y].status;
 
 		// not hit yet - hit it
-		if (status === "not yet hit") {
-			return board.receiveAttack(x, y);
-		} else throw "ALREADY HIT, RUN FN AGAIN";
+		if (status === "not hit yet") {
+			return gameboard.receiveAttack(x, y);
+		} else {
+			makeAttack(gameboard);
+		}
 	};
 
 	const _getRandomIntInclusive = (min, max) => {

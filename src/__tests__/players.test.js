@@ -25,6 +25,32 @@ describe("humanPlayer", () => {
 	});
 });
 
-// describe("computerPlayer", () => {
-//     test("correct")
-// })
+const POSSIBLE_VALUES = ["Missed...", "A ship was hit!"];
+
+describe("computerPlayer", () => {
+	test("correctly attacks", () => {
+		const pship = Ship(2);
+		const cship = Ship(2);
+
+		humanPlayer.gboard.placeShipOnGameboard(pship, 0, 0, "vertical");
+		computerPlayer.gboard.placeShipOnGameboard(cship, 0, 0, "vertical");
+		const result = humanPlayer.makeAttack(0, 0, humanPlayer.gboard);
+		expect(result).toBe("A ship was hit!");
+		// expect(computerPlayer.makeAttack(humanPlayer.gboard)).toBe(
+		// 	"A ship was hit!"
+		// );
+		expect(() => computerPlayer.makeAttack(humanPlayer.gboard)).toThrow();
+		// const result = computerPlayer.makeAttack(humanPlayer.gboard);
+		// expect(POSSIBLE_VALUES).toContain(result);
+	});
+
+	test.only("recursively attacks until a ship is hit", () => {
+		const pship = Ship(2);
+		const cship = Ship(2);
+
+		humanPlayer.gboard.placeShipOnGameboard(pship, 0, 0, "vertical");
+		computerPlayer.gboard.placeShipOnGameboard(cship, 0, 0, "vertical");
+		const result = computerPlayer.makeAttack(humanPlayer.gboard);
+		expect(POSSIBLE_VALUES).toContain(result);
+	});
+});
