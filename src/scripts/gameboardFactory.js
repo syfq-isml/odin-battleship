@@ -89,15 +89,24 @@ const gameboard = function () {
 		// find the ship
 		// call hit(x-coord, y-coord) with
 		// NO - show that it is a miss
+		if (!_checkIfNotYetHit(x, y)) throw `${_board[x][y].status}`;
+
 		if (_board[x][y].isShip) {
 			const shipHit = _allShips.find(
 				(ship) => ship.name === _board[x][y].shipName
 			);
 			shipHit.hit(_board[x][y].shipIndex);
 			_board[x][y].status = "A ship was hit!";
+			return "A ship was hit!";
 		} else {
 			_board[x][y].status = "Missed...";
+			return "Missed...";
 		}
+	};
+
+	const _checkIfNotYetHit = (x, y) => {
+		if (_board[x][y].status === "not hit yet") return true;
+		else return false;
 	};
 
 	const isAllSunk = () => {
@@ -105,6 +114,18 @@ const gameboard = function () {
 
 		return false;
 	};
+
+	// const getAllAvailableTiles = () => {
+	// 	let arr = [];
+	// 	for (let i = 0; i < 10; i++) {
+	// 		arr.push([]);
+	// 		for (let j = 0; j < 10; j++) {
+	// 			if(_board[i][j].status === "not yet hit"){
+	// 				arr[i].push(newTile);
+	// 			}
+	// 		}
+	// 	}
+	// };
 
 	// spread operator to place ships
 	return {

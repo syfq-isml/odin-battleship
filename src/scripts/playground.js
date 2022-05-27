@@ -144,4 +144,7 @@ const gameboard = function () {
 const player = gameboard();
 
 const twoShip = Ship(2);
+const tweShip = Ship(3);
+
 player.placeShipOnGameboard(twoShip, 0, 3, "vertical");
+player.placeShipOnGameboard(tweShip, 2, 3, "vertical");

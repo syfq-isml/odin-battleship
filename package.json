@@ -7,6 +7,7 @@
     "test": "jest",
     "tship": "jest shipFactory.test.js",
     "tgame": "jest gameboardFactory.test.js",
+    "tplayers": "jest players.test.js",
     "build": "webpack",
     "dev": "webpack serve",
     "watch": "webpack --watch"
