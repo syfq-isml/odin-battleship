@@ -1,0 +1,28 @@
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* * {
+	border: 1px solid white;
+} */
+
+body {
+	background-color: black;
+	color: white;
+}
+
+#game-area {
+	display: flex;
+	justify-content: space-around;
+}
+
+#player-gameboard,
+#computer-gameboard {
+	display: grid;
+	grid-template-columns: repeat(10, 50px);
+	grid-template-rows: repeat(10, 50px);
+}

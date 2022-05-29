@@ -28,17 +28,21 @@ module.exports = {
 			{
 				test: /\.(png|svg|jpg|jpeg|gif)$/i,
 				type: "asset/resource",
-				options: {
-					name: "[name].[hash].[ext]",
-					outputPath: "imgs",
-				},
+				use: [
+					{
+						options: {
+							name: "[name].[hash].[ext]",
+							outputPath: "imgs",
+						},
+					},
+				],
 			},
 		],
 	},
 	devtool: "inline-source-map",
 	plugins: [
 		new HtmlWebpackPlugin({
-			title: "Weather App",
+			title: "Battleships | TheOdinProject",
 			filename: "index.html",
 			template: "src/template.html",
 		}),
