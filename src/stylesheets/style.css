@@ -1,18 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&family=VT323&display=swap");
+
 *,
 *::before,
-*::after {
+*::after,
+h1,
+h2 {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
 
-/* * {
-	border: 1px solid white;
-} */
-
 body {
 	background-color: black;
 	color: white;
+}
+
+header {
+	display: flex;
+	justify-content: center;
+}
+
+#logo > h1 {
+	font-family: "Black Ops One", cursive;
+	font-weight: 400;
+	font-size: 60px;
+}
+
+#instructions-area {
+	display: flex;
+	justify-content: center;
+}
+
+.instructions {
+	display: flex;
+	font-family: "VT323", monospace;
+	justify-content: center;
+	border: 2px solid white;
+	border-radius: 50px;
+	margin: 10px 0 20px 0;
+	width: 60vw;
+}
+
+.instructions p {
+	margin: 15px;
 }
 
 #game-area {
@@ -25,4 +55,23 @@ body {
 	display: grid;
 	grid-template-columns: repeat(10, 50px);
 	grid-template-rows: repeat(10, 50px);
+	background-color: rgb(72, 74, 74);
+}
+
+.game-tile {
+	border: 1px solid white;
+}
+
+.tile-content {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.board-label {
+	display: flex;
+	justify-content: center;
+	margin: 15px;
 }

@@ -3,10 +3,16 @@ const createGameboard = (divID) => {
 	// --> create 100 divs and append to the div
 	const parent = document.querySelector(divID);
 	for (let i = 0; i < 100; i++) {
-		const newDiv = document.createElement("div");
-		newDiv.classList.add("game-tile");
-		newDiv.innerText = "A";
-		parent.append(newDiv);
+		const tile = document.createElement("div");
+		tile.classList.add("game-tile");
+
+		const tileContent = document.createElement("div");
+		tileContent.classList.add("tile-content");
+		tileContent.setAttribute("data-tile-id", `${i + 1}`);
+
+		tileContent.innerText = "X";
+		tile.append(tileContent);
+		parent.append(tile);
 	}
 };
 
