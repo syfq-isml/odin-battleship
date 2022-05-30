@@ -27,6 +27,7 @@ describe("humanPlayer", () => {
 
 const POSSIBLE_VALUES = ["Missed...", "A ship was hit!"];
 
+// no longer works, i'm returning an array now
 describe("computerPlayer", () => {
 	test("correctly attacks", () => {
 		const pship = Ship(2);

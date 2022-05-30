@@ -39,27 +39,35 @@ const DOM_attack = (e) => {
 	// get the tile coordinate
 	const coords = e.target.dataset.tileId;
 	let arr = Array.from(coords);
-	let [x, y] = [...arr];
+	let [x, y] = arr;
 	return humanPlayer.makeAttack(x, y, computerPlayer.gboard);
 };
 
-const removeListenersFromTiles = (player, callback) => {
-	const tiles = document.querySelectorAll(`[data-tile-id="${player}]"`);
+const removeListenersFromTiles = (callback) => {
+	const tiles = document.querySelectorAll(`[data-player="computer"`);
 	tiles.forEach((tile) => {
 		tile.removeEventListener("click", callback);
 	});
 };
 
-const ANNOUNCE_gameOver = () => {
+const ANNOUNCE_gameOver = (str) => {
 	const ann = document.querySelector(".instructions p");
-	ann.innerText = "GAME OVER!";
+	if (str === "win") {
+		ann.innerText = "GAME OVER! YOU WIN!";
+	} else {
+		ann.innerText = "GAME OVER! YOU LOSE!";
+	}
 };
 
-const ANNOUNCE_shipHit = (str) => {
+const ANNOUNCE_shipHit = (player, str) => {
 	const ann = document.querySelector(".instructions p");
-	ann.innerText = str;
+	if (player === "human") {
+		ann.innerText = str;
+		return;
+	}
+	ann.innerText = `Computer's Move: ${str}`;
 };
-const ANNOUNCE_shipMiss = (str) => {
+const ANNOUNCE_shipMiss = (player, str) => {
 	const ann = document.querySelector(".instructions p");
 	ann.innerText = str;
 };
@@ -76,6 +84,19 @@ const RENDER_shipMiss = (e) => {
 	tile.classList.add("tile-miss");
 };
 
+const RENDER_shipMiss_comp = (coords) => {
+	// find the tile that was hit (using coords)
+	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
+	tile.innerText = "o";
+	tile.classList.add("tile-miss");
+};
+
+const RENDER_shipHit_comp = (coords) => {
+	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
+	tile.innerText = "X";
+	tile.classList.add("tile-hit");
+};
+
 export {
 	initGameboards,
 	addListenersToTiles,
@@ -86,4 +107,6 @@ export {
 	ANNOUNCE_shipMiss,
 	RENDER_shipHit,
 	RENDER_shipMiss,
+	RENDER_shipHit_comp,
+	RENDER_shipMiss_comp,
 };

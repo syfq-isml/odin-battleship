@@ -106,7 +106,7 @@ const gameboard = function () {
 
 	const _checkIfNotYetHit = (x, y) => {
 		if (_board[x][y].status === "not hit yet") return true;
-		else return false;
+		return false;
 	};
 
 	const isAllSunk = () => {

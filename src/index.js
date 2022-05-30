@@ -11,6 +11,8 @@ import {
 	ANNOUNCE_shipMiss,
 	RENDER_shipHit,
 	RENDER_shipMiss,
+	RENDER_shipHit_comp,
+	RENDER_shipMiss_comp,
 } from "./scripts/DOMmodule";
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
@@ -19,6 +21,8 @@ let computerTurn;
 
 initGameboards();
 runNewGame();
+console.log(humanPlayer.gboard.board);
+console.log(computerPlayer.gboard.board);
 
 function runNewGame() {
 	spawnShips(humanPlayer);
@@ -29,23 +33,55 @@ function runNewGame() {
 // function to get input from human
 addListenersToTiles(handleHumanClick);
 
-function handleHumanClick(e) {
+async function handleHumanClick(e) {
+	console.log(e.target);
 	let result = DOM_attack(e);
 	if (result === "A ship was hit!") {
 		RENDER_shipHit(e);
-		ANNOUNCE_shipHit(result);
+		ANNOUNCE_shipHit("human", result);
+
+		if (computerPlayer.gboard.isAllSunk()) {
+			ANNOUNCE_gameOver("win");
+			removeListenersFromTiles(handleHumanClick);
+			return;
+		}
 		return;
 	}
 
 	if (result === "Missed...") {
 		RENDER_shipMiss(e);
-		ANNOUNCE_shipMiss(result);
+		ANNOUNCE_shipHit("human", result);
 	}
 
-	if (computerPlayer.gboard.isAllSunk()) {
-		ANNOUNCE_gameOver();
-		return;
+	// removeListenersFromTiles(handleHumanClick);
+	function computerMove() {
+		let resultArr = computerPlayer.makeAttack(humanPlayer.gboard);
+		console.log(resultArr);
+		let [x, y, compResult] = resultArr;
+		console.log(x, y, compResult);
+		if (compResult === "A ship was hit!") {
+			RENDER_shipHit_comp(`${x}${y}`);
+			ANNOUNCE_shipHit("computer", compResult);
+
+			if (humanPlayer.gboard.isAllSunk()) {
+				ANNOUNCE_gameOver("lose");
+				return;
+			}
+
+			return computerMove();
+		}
+
+		if (compResult === "Missed...") {
+			RENDER_shipMiss_comp(`${x}${y}`);
+			ANNOUNCE_shipHit("computer", compResult);
+		}
+
+		return "Next player";
 	}
+
+	computerMove();
+
+	// addListenersToTiles(handleHumanClick);
 }
 
 function spawnShips(player) {

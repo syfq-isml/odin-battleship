@@ -24,9 +24,9 @@ const computerPlayer = (function () {
 
 		// not hit yet - hit it
 		if (status === "not hit yet") {
-			return gameboard.receiveAttack(x, y);
+			return [x, y, gameboard.receiveAttack(x, y)];
 		} else {
-			makeAttack(gameboard);
+			return makeAttack(gameboard);
 		}
 	};
 
