@@ -13,6 +13,7 @@ import {
 	RENDER_shipMiss,
 	RENDER_shipHit_comp,
 	RENDER_shipMiss_comp,
+	ANNOUNCE_computerDelay,
 } from "./scripts/DOMmodule";
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
@@ -21,8 +22,6 @@ let computerTurn;
 
 initGameboards();
 runNewGame();
-console.log(humanPlayer.gboard.board);
-console.log(computerPlayer.gboard.board);
 
 function runNewGame() {
 	spawnShips(humanPlayer);
@@ -33,7 +32,7 @@ function runNewGame() {
 // function to get input from human
 addListenersToTiles(handleHumanClick);
 
-async function handleHumanClick(e) {
+function handleHumanClick(e) {
 	console.log(e.target);
 	let result = DOM_attack(e);
 	if (result === "A ship was hit!") {
@@ -53,7 +52,6 @@ async function handleHumanClick(e) {
 		ANNOUNCE_shipHit("human", result);
 	}
 
-	// removeListenersFromTiles(handleHumanClick);
 	function computerMove() {
 		let resultArr = computerPlayer.makeAttack(humanPlayer.gboard);
 		console.log(resultArr);
@@ -68,7 +66,8 @@ async function handleHumanClick(e) {
 				return;
 			}
 
-			return computerMove();
+			setTimeout(ANNOUNCE_computerDelay, 2000);
+			return setTimeout(computerMove, 4000);
 		}
 
 		if (compResult === "Missed...") {
@@ -79,9 +78,12 @@ async function handleHumanClick(e) {
 		return "Next player";
 	}
 
-	computerMove();
+	removeListenersFromTiles(handleHumanClick);
+	console.log("removed listeners");
 
-	// addListenersToTiles(handleHumanClick);
+	setTimeout(ANNOUNCE_computerDelay, 2000);
+	setTimeout(computerMove, 4000);
+	setTimeout(addListenersToTiles, 5000, handleHumanClick);
 }
 
 function spawnShips(player) {

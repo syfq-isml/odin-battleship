@@ -32,7 +32,7 @@ module.exports = {
 					{
 						options: {
 							name: "[name].[hash].[ext]",
-							outputPath: "imgs",
+							// outputPath: "imgs",
 						},
 					},
 				],

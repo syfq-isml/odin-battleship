@@ -50,36 +50,69 @@ const removeListenersFromTiles = (callback) => {
 	});
 };
 
-const ANNOUNCE_gameOver = (str) => {
+const ANNOUNCE_computerDelay = () => {
 	const ann = document.querySelector(".instructions p");
+	const emph = document.querySelector("#hitMiss");
+	emph.innerText = "";
+	ann.innerText = "Computer is making a move...";
+};
+
+const ANNOUNCE_gameOver = (str) => {
+	const emph = document.querySelector("#hitMiss");
+	const ann = document.querySelector(".instructions p");
+	ann.innerText = "";
 	if (str === "win") {
-		ann.innerText = "GAME OVER! YOU WIN!";
+		emph.innerText = "GAME OVER: YOU WIN!";
 	} else {
-		ann.innerText = "GAME OVER! YOU LOSE!";
+		emph.innerText = "GAME OVER: YOU LOSE!";
 	}
 };
 
 const ANNOUNCE_shipHit = (player, str) => {
 	const ann = document.querySelector(".instructions p");
+	const emph = document.querySelector("#hitMiss");
+	console.log(emph);
 	if (player === "human") {
-		ann.innerText = str;
+		if (str === "A ship was hit!") {
+			emph.innerText = "YOU HIT!";
+			ann.innerText = "You get another shot!";
+			return;
+		}
+		emph.innerText = "YOU MISSED!";
+		ann.innerText = "It's Computer's turn.";
 		return;
 	}
-	ann.innerText = `Computer's Move: ${str}`;
+
+	if (str === "A ship was hit!") {
+		emph.innerText = "CPU HIT!";
+		ann.innerText = `Computer gets another shot!`;
+		return;
+	}
+	emph.innerText = "CPU MISSED!";
+	ann.innerText = "It's your turn!";
+	return;
 };
 const ANNOUNCE_shipMiss = (player, str) => {
 	const ann = document.querySelector(".instructions p");
+	const emph = document.querySelector("#hitMiss");
+	emph.innerText = "";
 	ann.innerText = str;
 };
 
-const RENDER_shipHit = (e) => {
+const RENDER_shipHit = (e, image) => {
 	const tile = e.target;
+	// const img = document.createElement("img");
+	// img.src = image;
+	// tile.append(img);
 	tile.innerText = "X";
 	tile.classList.add("tile-hit");
 };
 
-const RENDER_shipMiss = (e) => {
+const RENDER_shipMiss = (e, image) => {
 	const tile = e.target;
+	// const img = document.createElement("img");
+	// img.src = image;
+	// tile.append(img);
 	tile.innerText = "o";
 	tile.classList.add("tile-miss");
 };
@@ -109,4 +142,5 @@ export {
 	RENDER_shipMiss,
 	RENDER_shipHit_comp,
 	RENDER_shipMiss_comp,
+	ANNOUNCE_computerDelay,
 };
