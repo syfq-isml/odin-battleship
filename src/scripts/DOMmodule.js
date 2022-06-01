@@ -130,10 +130,13 @@ const RENDER_shipHit_comp = (coords) => {
 	tile.classList.add("tile-hit");
 };
 
-const RENDER_shipOnBoard = (coords) => {
-	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
-	tile.innerText = "X";
-	tile.classList.add("tile-hit");
+const RENDER_shipOnBoard = (arr) => {
+	arr.forEach((item) => {
+		item.forEach((coord) => {
+			const tile = document.querySelector(`[data-tile-id="${coord}"]`);
+			tile.classList.add("has-ship");
+		});
+	});
 };
 
 const drawShip = (length, parent) => {
@@ -154,15 +157,6 @@ const drawAllShips = () => {
 	drawShip(2, "#ship2-1");
 	drawShip(2, "#ship2-2");
 };
-
-// function to place ship
-// click on ship
-// get ship's length
-// on click:
-// get the coord of the tile
-// DATA: add the ship
-// render the ship that was placed
-// remove the ship from the placer div
 
 const addEventListenerToShips = (callback) => {
 	const ships = document.querySelectorAll("[data-ship-length]");
@@ -197,11 +191,12 @@ export {
 	ANNOUNCE_gameOver,
 	ANNOUNCE_shipHit,
 	ANNOUNCE_shipMiss,
+	ANNOUNCE_computerDelay,
 	RENDER_shipHit,
 	RENDER_shipMiss,
 	RENDER_shipHit_comp,
 	RENDER_shipMiss_comp,
-	ANNOUNCE_computerDelay,
+	RENDER_shipOnBoard,
 	drawAllShips,
 	addGlobalListeners,
 	removeGlobalListeners,

@@ -122,6 +122,16 @@ header {
 	cursor: move;
 }
 
+/* --- SET-UP INTERACTIONS --- */
+
+.selected {
+	opacity: 0.3;
+}
+
+.has-ship {
+	background-color: blue;
+}
+
 /* --- GAME INTERACTIONS --- */
 .tile-hit {
 	background-color: red;
@@ -139,10 +149,6 @@ header {
 /* --- CSS MAGIC --- */
 .hidden {
 	display: none;
-}
-
-.selected {
-	opacity: 0.3;
 }
 
 /* --- TO REMOVE AFTER INIT --- */

@@ -9,11 +9,12 @@ import {
 	ANNOUNCE_gameOver,
 	ANNOUNCE_shipHit,
 	ANNOUNCE_shipMiss,
+	ANNOUNCE_computerDelay,
 	RENDER_shipHit,
 	RENDER_shipMiss,
 	RENDER_shipHit_comp,
 	RENDER_shipMiss_comp,
-	ANNOUNCE_computerDelay,
+	RENDER_shipOnBoard,
 	drawAllShips,
 	addGlobalListeners,
 	removeGlobalListeners,
@@ -21,22 +22,18 @@ import {
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
 
-let computerTurn;
-let shipLengthResult;
-let boardCoords;
-
 initGameboards();
 drawAllShips();
 // addeventlistener to placer ( e is on ships)
 // addeventlistner to board ( e is on board )
 
 runNewGame();
+RENDER_shipOnBoard(humanPlayer.gboard.allShipsCoords);
 console.log(humanPlayer.gboard.allShipsCoords);
 
 function runNewGame() {
 	spawnShips(humanPlayer);
 	spawnShips(computerPlayer);
-	computerTurn = false;
 }
 
 // function to get input from human
