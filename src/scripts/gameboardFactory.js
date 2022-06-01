@@ -26,6 +26,10 @@ const gameboard = function () {
 		_allShips.push(shipObj);
 	};
 
+	const _addCoordsIntoArr = (coordsArr) => {
+		_allShipsCoords.push(coordsArr);
+	};
+
 	const _isShipTiles = (x, y, length, orientation) => {
 		if (orientation === "vertical") {
 			let newArr = [];
@@ -45,12 +49,16 @@ const gameboard = function () {
 		return false;
 	};
 
+	let _allShipsCoords = [];
+
 	const placeShipOnGameboard = function (shipObj, x, y, orientation) {
 		// given x, y coords, set ship to position on the gameboard
 		// coords start with [0,0]
 
 		if (_isShipTiles(x, y, shipObj.length, orientation))
 			throw "Already has a ship on one of the tiles!";
+
+		let coords = [];
 
 		// horizontal placement of ships
 		if (orientation === "horizontal") {
@@ -63,6 +71,7 @@ const gameboard = function () {
 				_board[x][j].shipName = shipObj.name;
 				_board[x][j].shipIndex = indexCounter;
 				indexCounter++;
+				coords.push(`${x}${j}`);
 			}
 		}
 
@@ -77,9 +86,11 @@ const gameboard = function () {
 				_board[i][y].shipName = shipObj.name;
 				_board[i][y].shipIndex = indexCounter;
 				indexCounter++;
+				coords.push(`${i}${y}`);
 			}
 		}
 		_addShipIntoArr(shipObj);
+		_addCoordsIntoArr(coords);
 	};
 
 	const receiveAttack = function (x, y) {
@@ -131,6 +142,9 @@ const gameboard = function () {
 	return {
 		get board() {
 			return _board;
+		},
+		get allShipsCoords() {
+			return _allShipsCoords;
 		},
 		placeShipOnGameboard,
 		receiveAttack,

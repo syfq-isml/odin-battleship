@@ -7,9 +7,9 @@ const createGameboard = (divID, playerName) => {
 	for (let i = 0; i < 100; i++) {
 		const tile = document.createElement("div");
 		tile.classList.add("game-tile");
-
 		const tileContent = document.createElement("div");
 		tileContent.classList.add("tile-content");
+		tileContent.classList.add("set-up");
 		if (i < 10) {
 			tileContent.setAttribute("data-tile-id", `0${i}`);
 		} else {
@@ -130,6 +130,65 @@ const RENDER_shipHit_comp = (coords) => {
 	tile.classList.add("tile-hit");
 };
 
+const RENDER_shipOnBoard = (coords) => {
+	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
+	tile.innerText = "X";
+	tile.classList.add("tile-hit");
+};
+
+const drawShip = (length, parent) => {
+	for (let i = 0; i < length; i++) {
+		const newDiv = document.createElement("div");
+		newDiv.classList.add("drawn-ship");
+		newDiv.setAttribute("data-ship-length", length);
+		const parentDiv = document.querySelector(parent);
+		parentDiv.append(newDiv);
+	}
+};
+
+const drawAllShips = () => {
+	drawShip(5, "#ship5");
+	drawShip(4, "#ship4");
+	drawShip(3, "#ship3-1");
+	drawShip(3, "#ship3-2");
+	drawShip(2, "#ship2-1");
+	drawShip(2, "#ship2-2");
+};
+
+// function to place ship
+// click on ship
+// get ship's length
+// on click:
+// get the coord of the tile
+// DATA: add the ship
+// render the ship that was placed
+// remove the ship from the placer div
+
+const addEventListenerToShips = (callback) => {
+	const ships = document.querySelectorAll("[data-ship-length]");
+	ships.addEventListener("click", callback);
+};
+
+const getShipLength = (e) => {
+	shipLengthResult = e.target.dataset.shipLength;
+};
+
+const handleClickOnBoard = (e) => {
+	boardCoords = e.target.dataset.tileId;
+};
+
+const everything = () => {};
+
+const addGlobalListeners = (element, eventType, callback) => {
+	const elem = document.querySelector(element);
+	elem.addEventListener(eventType, callback);
+};
+
+const removeGlobalListeners = (element, eventType, callback) => {
+	const elem = document.querySelector(element);
+	elem.removeEventListener(eventType, callback);
+};
+
 export {
 	initGameboards,
 	addListenersToTiles,
@@ -143,4 +202,7 @@ export {
 	RENDER_shipHit_comp,
 	RENDER_shipMiss_comp,
 	ANNOUNCE_computerDelay,
+	drawAllShips,
+	addGlobalListeners,
+	removeGlobalListeners,
 };

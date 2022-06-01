@@ -14,14 +14,24 @@ import {
 	RENDER_shipHit_comp,
 	RENDER_shipMiss_comp,
 	ANNOUNCE_computerDelay,
+	drawAllShips,
+	addGlobalListeners,
+	removeGlobalListeners,
 } from "./scripts/DOMmodule";
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
 
 let computerTurn;
+let shipLengthResult;
+let boardCoords;
 
 initGameboards();
+drawAllShips();
+// addeventlistener to placer ( e is on ships)
+// addeventlistner to board ( e is on board )
+
 runNewGame();
+console.log(humanPlayer.gboard.allShipsCoords);
 
 function runNewGame() {
 	spawnShips(humanPlayer);

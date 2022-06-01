@@ -13,6 +13,7 @@ h2 {
 body {
 	background-color: black;
 	color: white;
+	font-family: "VT323", monospace;
 }
 
 header {
@@ -51,7 +52,7 @@ header {
 	/* margin: 15px; */
 }
 
-#game-area {
+:where(#game-area) {
 	display: flex;
 	justify-content: space-around;
 }
@@ -86,6 +87,39 @@ header {
 	display: flex;
 	justify-content: center;
 	margin: 15px;
+	font-family: "Press Start 2P", cursive;
+}
+
+/* --- INITIAL SET-UP --- */
+
+#ship-placer {
+	background-color: rgb(72, 74, 74);
+	padding: 20px 30px 30px 30px;
+	border-radius: 5px;
+
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	height: fit-content;
+}
+
+#ship-container {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.placing-ships {
+	display: flex;
+}
+
+.drawn-ship {
+	height: 50px;
+	aspect-ratio: 1/1;
+	border: 1px solid white;
+	background-color: blue;
+	cursor: move;
 }
 
 /* --- GAME INTERACTIONS --- */
@@ -103,6 +137,20 @@ header {
 }
 
 /* --- CSS MAGIC --- */
-/* .hidden {
+.hidden {
 	display: none;
-} */
+}
+
+.selected {
+	opacity: 0.3;
+}
+
+/* --- TO REMOVE AFTER INIT --- */
+.set-up {
+	cursor: grab;
+}
+
+.setup-gameboard {
+	justify-content: center;
+	gap: 20px;
+}
