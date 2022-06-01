@@ -12,12 +12,12 @@ import {
 	ANNOUNCE_computerDelay,
 	RENDER_shipHit,
 	RENDER_shipMiss,
-	RENDER_shipHit_comp,
-	RENDER_shipMiss_comp,
 	RENDER_shipOnBoard,
+	RENDER_shipSunk,
 	drawAllShips,
-	addGlobalListeners,
-	removeGlobalListeners,
+	addEventListenerToShips,
+	removeEventListenerToShips,
+	addHoverEffect,
 } from "./scripts/DOMmodule";
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
@@ -32,19 +32,29 @@ RENDER_shipOnBoard(humanPlayer.gboard.allShipsCoords);
 console.log(humanPlayer.gboard.allShipsCoords);
 
 function runNewGame() {
-	spawnShips(humanPlayer);
+	// spawnShips(humanPlayer);
 	spawnShips(computerPlayer);
 }
+
+// SET-UP TIME
+addEventListenerToShips(placement_part1);
 
 // function to get input from human
 addListenersToTiles(handleHumanClick);
 
 function handleHumanClick(e) {
 	console.log(e.target);
-	let result = DOM_attack(e);
+	let [x, y, result] = DOM_attack(e);
+
 	if (result === "A ship was hit!") {
 		RENDER_shipHit(e);
-		ANNOUNCE_shipHit("human", result);
+
+		if (humanPlayer.gboard.isShipSunk(x, y)) {
+			ANNOUNCE_shipHit("human", result, true);
+			RENDER_shipSunk();
+		} else {
+			ANNOUNCE_shipHit("human", result, false);
+		}
 
 		if (computerPlayer.gboard.isAllSunk()) {
 			ANNOUNCE_gameOver("win");
@@ -106,6 +116,61 @@ function spawnShips(player) {
 	player.gboard.placeShipOnGameboard(Ship_3_2, 6, 5, "vertical");
 	player.gboard.placeShipOnGameboard(Ship_2_1, 8, 8, "horizontal");
 	player.gboard.placeShipOnGameboard(Ship_2_2, 9, 8, "horizontal");
+}
+
+function placement_part1(e) {
+	const selectedShip = document.querySelectorAll(
+		`[data-placer-name="${e.target.dataset.placerName}"]`
+	);
+	let length = e.target.dataset.shipLength;
+	length = +length;
+	console.log(length);
+
+	selectedShip.forEach((block) => {
+		block.classList.add("selected");
+	});
+
+	addHoverEffect(length, "vertical");
+
+	const boardTiles = document.querySelectorAll(".tile-content");
+	boardTiles.forEach((tile) => {
+		tile.addEventListener("click", placement_part2);
+	});
+
+	const otherShips = document.querySelectorAll(
+		`[data-placer-name]:not([data-placer-name="${e.target.dataset.placerName}"])`
+	);
+	otherShips.forEach((ship) => {
+		// ship.classList.add("unavailable");
+		ship.removeEventListener("click", placement_part1);
+	});
+
+	function placement_part2(e) {
+		const coords = e.target.dataset.tileId;
+		p_spawnShips(length, coords, "ok");
+		RENDER_shipOnBoard(humanPlayer.gboard.allShipsCoords);
+
+		selectedShip.forEach((block) => {
+			console.log("Called");
+			block.removeEventListener("click", placement_part1);
+			block.removeEventListener("click", placement_part2);
+		});
+
+		boardTiles.forEach((tile) => {
+			tile.removeEventListener("click", placement_part2);
+		});
+		otherShips.forEach((ship) => {
+			ship.addEventListener("click", placement_part1);
+		});
+	}
+}
+
+function p_spawnShips(length, coords, orientation) {
+	const newShip = Ship(+length);
+	let [x, y] = coords.split("");
+	console.log(length);
+	console.log(x, y);
+	humanPlayer.gboard.placeShipOnGameboard(newShip, +x, +y, "vertical");
 }
 
 // after each click

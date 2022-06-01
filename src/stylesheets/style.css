@@ -104,6 +104,14 @@ header {
 	height: fit-content;
 }
 
+#play-btn {
+	margin-top: 30px;
+	width: 150px;
+	height: 70px;
+	align-self: center;
+	font-family: "Press Start 2P", cursive;
+}
+
 #ship-container {
 	display: flex;
 	flex-direction: column;
@@ -112,6 +120,7 @@ header {
 
 .placing-ships {
 	display: flex;
+	width: fit-content;
 }
 
 .drawn-ship {
@@ -132,6 +141,14 @@ header {
 	background-color: blue;
 }
 
+.has-ship-shadow {
+	background-color: rgba(0, 0, 255, 0.491);
+}
+
+.unavailable {
+	background-color: green;
+}
+
 /* --- GAME INTERACTIONS --- */
 .tile-hit {
 	background-color: red;
@@ -144,6 +161,10 @@ header {
 	font-family: "Press Start 2P", cursive;
 	font-size: 1rem;
 	font-weight: 700;
+}
+
+.tile-sunk {
+	background-color: rgb(52, 52, 52);
 }
 
 /* --- CSS MAGIC --- */

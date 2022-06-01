@@ -40,7 +40,7 @@ const DOM_attack = (e) => {
 	const coords = e.target.dataset.tileId;
 	let arr = Array.from(coords);
 	let [x, y] = arr;
-	return humanPlayer.makeAttack(x, y, computerPlayer.gboard);
+	return [x, y, humanPlayer.makeAttack(x, y, computerPlayer.gboard)];
 };
 
 const removeListenersFromTiles = (callback) => {
@@ -68,11 +68,16 @@ const ANNOUNCE_gameOver = (str) => {
 	}
 };
 
-const ANNOUNCE_shipHit = (player, str) => {
+const ANNOUNCE_shipHit = (player, str, shipSunk) => {
 	const ann = document.querySelector(".instructions p");
 	const emph = document.querySelector("#hitMiss");
 	console.log(emph);
 	if (player === "human") {
+		if (shipSunk) {
+			emph.innerText = "YOU SUNK A SHIP!";
+			ann.innerText = "You get another shot!";
+		}
+
 		if (str === "A ship was hit!") {
 			emph.innerText = "YOU HIT!";
 			ann.innerText = "You get another shot!";
@@ -80,6 +85,12 @@ const ANNOUNCE_shipHit = (player, str) => {
 		}
 		emph.innerText = "YOU MISSED!";
 		ann.innerText = "It's Computer's turn.";
+		return;
+	}
+
+	if (shipSunk) {
+		emph.innerText = "CPU SUNK A SHIP!";
+		ann.innerText = "Computer gets another shot!";
 		return;
 	}
 
@@ -117,18 +128,18 @@ const RENDER_shipMiss = (e, image) => {
 	tile.classList.add("tile-miss");
 };
 
-const RENDER_shipMiss_comp = (coords) => {
-	// find the tile that was hit (using coords)
-	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
-	tile.innerText = "o";
-	tile.classList.add("tile-miss");
-};
+// const RENDER_shipMiss_comp = (coords) => {
+// 	// find the tile that was hit (using coords)
+// 	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
+// 	tile.innerText = "o";
+// 	tile.classList.add("tile-miss");
+// };
 
-const RENDER_shipHit_comp = (coords) => {
-	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
-	tile.innerText = "X";
-	tile.classList.add("tile-hit");
-};
+// const RENDER_shipHit_comp = (coords) => {
+// 	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
+// 	tile.innerText = "X";
+// 	tile.classList.add("tile-hit");
+// };
 
 const RENDER_shipOnBoard = (arr) => {
 	arr.forEach((item) => {
@@ -139,11 +150,17 @@ const RENDER_shipOnBoard = (arr) => {
 	});
 };
 
+const RENDER_shipSunk = (e) => {
+	const tile = e.target;
+	tile.classList.add("tile-sunk");
+};
+
 const drawShip = (length, parent) => {
 	for (let i = 0; i < length; i++) {
 		const newDiv = document.createElement("div");
 		newDiv.classList.add("drawn-ship");
 		newDiv.setAttribute("data-ship-length", length);
+		newDiv.setAttribute("data-placer-name", parent);
 		const parentDiv = document.querySelector(parent);
 		parentDiv.append(newDiv);
 	}
@@ -160,7 +177,16 @@ const drawAllShips = () => {
 
 const addEventListenerToShips = (callback) => {
 	const ships = document.querySelectorAll("[data-ship-length]");
-	ships.addEventListener("click", callback);
+	ships.forEach((ship) => {
+		ship.addEventListener("click", callback);
+	});
+};
+
+const removeEventListenerToShips = (callback) => {
+	const ships = document.querySelectorAll("[data-ship-length]");
+	ships.forEach((ship) => {
+		ship.removeEventListener("click", callback);
+	});
 };
 
 const getShipLength = (e) => {
@@ -171,8 +197,6 @@ const handleClickOnBoard = (e) => {
 	boardCoords = e.target.dataset.tileId;
 };
 
-const everything = () => {};
-
 const addGlobalListeners = (element, eventType, callback) => {
 	const elem = document.querySelector(element);
 	elem.addEventListener(eventType, callback);
@@ -181,6 +205,66 @@ const addGlobalListeners = (element, eventType, callback) => {
 const removeGlobalListeners = (element, eventType, callback) => {
 	const elem = document.querySelector(element);
 	elem.removeEventListener(eventType, callback);
+};
+
+const addHoverEffect = (length, orientation) => {
+	const boardTiles = document.querySelectorAll(".tile-content");
+	boardTiles.forEach((tile) => {
+		tile.addEventListener("mouseenter", shipShadow);
+		tile.addEventListener("mouseleave", removeShipShadow);
+		tile.addEventListener("click", removeHoverEffect);
+	});
+
+	function shipShadow(e) {
+		const coords = e.target.dataset.tileId;
+		let [x, y] = coords.split("");
+		if (orientation === "vertical") {
+			for (let i = +x; i < +x + length; i++) {
+				if (+x < 0 || +x > 9 || +x + length - 1 > 9) continue;
+
+				const tile = document.querySelector(`[data-tile-id="${i}${+y}"]`);
+				// console.log(length);
+				// console.log(+x);
+				// console.log(+x + length);
+				// console.log(tile);
+				// console.log(i, y);
+				tile.classList.add("has-ship-shadow");
+			}
+		}
+
+		if (orientation === "horizontal") {
+			for (let j = +y; j < +y + length; j++) {
+				if (+y + length - 1 > 9 || +y > 9 || +y < 0) continue;
+
+				const tile = document.querySelector(`[data-tile-id="${+x}${j}"]`);
+				tile.classList.add("has-ship-shadow");
+			}
+		}
+	}
+
+	function removeShipShadow() {
+		const tile = document.querySelectorAll(".has-ship-shadow");
+		tile.forEach((tile) => {
+			tile.classList.remove("has-ship-shadow");
+		});
+	}
+
+	function removeHoverEffect() {
+		const boardTiles = document.querySelectorAll(".tile-content");
+		boardTiles.forEach((tile) => {
+			tile.removeEventListener("mouseenter", shipShadow);
+			tile.removeEventListener("mouseleave", removeShipShadow);
+			tile.classList.remove("has-ship-shadow");
+		});
+	}
+};
+
+const removeHoverEffect = () => {
+	const boardTiles = document.querySelectorAll(".tile-content");
+	boardTiles.forEach((tile) => {
+		tile.removeEventListener("mouseenter", shipShadow);
+		tile.removeEventListener("mouseleave", removeShipShadow);
+	});
 };
 
 export {
@@ -194,10 +278,10 @@ export {
 	ANNOUNCE_computerDelay,
 	RENDER_shipHit,
 	RENDER_shipMiss,
-	RENDER_shipHit_comp,
-	RENDER_shipMiss_comp,
 	RENDER_shipOnBoard,
+	RENDER_shipSunk,
 	drawAllShips,
-	addGlobalListeners,
-	removeGlobalListeners,
+	addEventListenerToShips,
+	removeEventListenerToShips,
+	addHoverEffect,
 };

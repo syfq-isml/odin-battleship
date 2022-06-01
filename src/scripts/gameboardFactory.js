@@ -126,6 +126,12 @@ const gameboard = function () {
 		return false;
 	};
 
+	const isShipSunk = (x, y) => {
+		const nameOfShip = _board[x][y].shipName;
+		const ship = _allShips.find((item) => item.name === nameOfShip);
+		return ship.isSunk();
+	};
+
 	// const getAllAvailableTiles = () => {
 	// 	let arr = [];
 	// 	for (let i = 0; i < 10; i++) {
@@ -149,6 +155,7 @@ const gameboard = function () {
 		placeShipOnGameboard,
 		receiveAttack,
 		isAllSunk,
+		isShipSunk,
 	};
 };
 
