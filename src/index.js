@@ -18,7 +18,7 @@ import {
 	addEventListenerToShips,
 	removeEventListenerToShips,
 	hoverModule,
-	removeShipFromPlacer,
+	rotateModule,
 } from "./scripts/DOMmodule";
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
@@ -39,6 +39,7 @@ function runNewGame() {
 
 // SET-UP TIME
 addEventListenerToShips(placement_part1);
+rotateModule.addEffect();
 
 // function to get input from human
 addListenersToTiles(handleHumanClick);
@@ -126,13 +127,12 @@ function placement_part1(e) {
 	let length = e.target.dataset.shipLength;
 	length = +length;
 
-	const shipElem = e.target.parentElement;
-
 	selectedShip.forEach((block) => {
 		block.classList.add("selected");
 	});
 
-	hoverModule.changeParam(length, "vertical");
+	hoverModule.changeLength(length);
+	hoverModule.changeOrient(rotateModule.orientation);
 	hoverModule.addEffect();
 
 	const boardTiles = document.querySelectorAll(".tile-content");
@@ -150,7 +150,7 @@ function placement_part1(e) {
 
 	function placement_part2(e) {
 		const coords = e.target.dataset.tileId;
-		p_spawnShips(length, coords, "ok");
+		p_spawnShips(length, coords, rotateModule.orientation);
 		RENDER_shipOnBoard(humanPlayer.gboard.allShipsCoords);
 
 		selectedShip.forEach((block) => {
@@ -166,8 +166,6 @@ function placement_part1(e) {
 			ship.addEventListener("click", placement_part1);
 		});
 
-		// removeShipFromPlacer(shipElem);
-
 		hoverModule.removeEffect();
 	}
 }
@@ -177,7 +175,8 @@ function p_spawnShips(length, coords, orientation) {
 	let [x, y] = coords.split("");
 	console.log(length);
 	console.log(x, y);
-	humanPlayer.gboard.placeShipOnGameboard(newShip, +x, +y, "vertical");
+	console.log(orientation);
+	humanPlayer.gboard.placeShipOnGameboard(newShip, +x, +y, orientation);
 }
 
 // after each click
