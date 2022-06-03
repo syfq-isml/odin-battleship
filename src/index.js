@@ -17,8 +17,8 @@ import {
 	drawAllShips,
 	addEventListenerToShips,
 	removeEventListenerToShips,
-	addHoverEffect,
 	hoverModule,
+	removeShipFromPlacer,
 } from "./scripts/DOMmodule";
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
@@ -125,13 +125,15 @@ function placement_part1(e) {
 	);
 	let length = e.target.dataset.shipLength;
 	length = +length;
-	console.log(length);
+
+	const shipElem = e.target.parentElement;
 
 	selectedShip.forEach((block) => {
 		block.classList.add("selected");
 	});
 
-	// hoverModule.addEffect(length, "vertical");
+	hoverModule.changeParam(length, "vertical");
+	hoverModule.addEffect();
 
 	const boardTiles = document.querySelectorAll(".tile-content");
 	boardTiles.forEach((tile) => {
@@ -155,7 +157,6 @@ function placement_part1(e) {
 			console.log("Called");
 			block.removeEventListener("click", placement_part1);
 			block.removeEventListener("click", placement_part2);
-			block.style.display = "none";
 		});
 
 		boardTiles.forEach((tile) => {
@@ -165,7 +166,9 @@ function placement_part1(e) {
 			ship.addEventListener("click", placement_part1);
 		});
 
-		// hoverModule.removeEffect();
+		// removeShipFromPlacer(shipElem);
+
+		hoverModule.removeEffect();
 	}
 }
 

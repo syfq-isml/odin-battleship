@@ -116,6 +116,7 @@ header {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
+	align-content: space-around;
 }
 
 .placing-ships {
@@ -135,6 +136,7 @@ header {
 
 .selected {
 	opacity: 0.3;
+	cursor: not-allowed;
 }
 
 .has-ship {

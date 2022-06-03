@@ -176,14 +176,14 @@ const drawAllShips = () => {
 };
 
 const addEventListenerToShips = (callback) => {
-	const ships = document.querySelectorAll("[data-ship-length]");
+	const ships = document.querySelectorAll("[data-placer-name]");
 	ships.forEach((ship) => {
 		ship.addEventListener("click", callback);
 	});
 };
 
 const removeEventListenerToShips = (callback) => {
-	const ships = document.querySelectorAll("[data-ship-length]");
+	const ships = document.querySelectorAll("[data-placer-name]");
 	ships.forEach((ship) => {
 		ship.removeEventListener("click", callback);
 	});
@@ -248,50 +248,18 @@ const addHoverEffect = (length, orientation) => {
 };
 
 const hoverModule = (function () {
-	// let _length;
-	// let _orientation;
-	const hoverController = new AbortController();
+	let _length;
+	let _orientation;
 
-	// const changeLengthOrientation = (length, orientation) => {
-	// 	_length = length;
-	// 	_orientation = orientation;
-	// }
+	const changeParam = (length, orientation) => {
+		_length = length;
+		_orientation = orientation;
+	};
 
-	const addEffect = (length, orientation) => {
+	const addEffect = () => {
 		const boardTiles = document.querySelectorAll(".tile-content");
 		boardTiles.forEach((tile) => {
-			tile.addEventListener(
-				"mouseenter",
-				(e) => {
-					const coords = e.target.dataset.tileId;
-					let [x, y] = coords.split("");
-					if (orientation === "vertical") {
-						for (let i = +x; i < +x + length; i++) {
-							if (+x < 0 || +x > 9 || +x + length - 1 > 9) continue;
-
-							const tile = document.querySelector(`[data-tile-id="${i}${+y}"]`);
-							// console.log(length);
-							// console.log(+x);
-							// console.log(+x + length);
-							// console.log(tile);
-							// console.log(i, y);
-							tile.classList.add("has-ship-shadow");
-						}
-					}
-
-					if (orientation === "horizontal") {
-						for (let j = +y; j < +y + +length; j++) {
-							if (+y + length - 1 > 9 || +y > 9 || +y < 0) continue;
-
-							const tile = document.querySelector(`[data-tile-id="${+x}${j}"]`);
-							tile.classList.add("has-ship-shadow");
-						}
-					}
-				},
-				{
-					signal: hoverController.signal,
-				}
-			);
+			tile.addEventListener("mouseenter", shipShadow);
 			tile.addEventListener("mouseleave", removeShipShadow);
 		});
 	};
@@ -303,20 +271,54 @@ const hoverModule = (function () {
 		});
 	}
 
+	function shipShadow(e) {
+		const coords = e.target.dataset.tileId;
+		let [x, y] = coords.split("");
+		if (_orientation === "vertical") {
+			for (let i = +x; i < +x + _length; i++) {
+				if (+x < 0 || +x > 9 || +x + _length - 1 > 9) continue;
+
+				const tile = document.querySelector(`[data-tile-id="${i}${+y}"]`);
+				// console.log(length);
+				// console.log(+x);
+				// console.log(+x + length);
+				// console.log(tile);
+				// console.log(i, y);
+				tile.classList.add("has-ship-shadow");
+			}
+		}
+
+		if (_orientation === "horizontal") {
+			for (let j = +y; j < +y + _length; j++) {
+				if (+y + _length - 1 > 9 || +y > 9 || +y < 0) continue;
+
+				const tile = document.querySelector(`[data-tile-id="${+x}${j}"]`);
+				tile.classList.add("has-ship-shadow");
+			}
+		}
+	}
+
 	const removeEffect = () => {
 		const boardTiles = document.querySelectorAll(".tile-content");
-		hoverController.abort();
+
 		boardTiles.forEach((tile) => {
+			tile.removeEventListener("mouseenter", shipShadow);
 			tile.removeEventListener("mouseleave", removeShipShadow);
 			tile.classList.remove("has-ship-shadow");
 		});
 	};
 
 	return {
+		changeParam,
 		addEffect,
 		removeEffect,
 	};
 })();
+
+function removeShipFromPlacer(id) {
+	console.log(id);
+	const container = document.querySelector("#ship-container");
+}
 
 function shipShadow(length, orientation) {
 	const coords = e.target.dataset.tileId;
@@ -377,6 +379,6 @@ export {
 	drawAllShips,
 	addEventListenerToShips,
 	removeEventListenerToShips,
-	addHoverEffect,
 	hoverModule,
+	removeShipFromPlacer,
 };
