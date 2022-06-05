@@ -107,6 +107,7 @@ function handleHumanClick(e) {
 
 		if (compResult === "A ship was hit!") {
 			RENDER_shipHit_comp(`${x}${y}`);
+			computerPlayer.changeLastMoveData(true, x, y);
 
 			if (humanPlayer.gboard.isShipSunk(x, y)) {
 				ANNOUNCE_shipHit("computer", compResult, true);
@@ -127,6 +128,7 @@ function handleHumanClick(e) {
 		if (compResult === "Missed...") {
 			RENDER_shipMiss_comp(`${x}${y}`);
 			ANNOUNCE_shipHit("computer", compResult, false);
+			computerPlayer.changeLastMoveData(false, x, y);
 		}
 
 		return "Next player";

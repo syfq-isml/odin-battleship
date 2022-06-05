@@ -74,9 +74,15 @@ const humanPlayer = (function () {
 const computerPlayer = (function () {
 	const gboard = gameboard();
 
-	let isLastMoveHit = false;
-	let lastMoveX;
-	let lastMoveY;
+	let _isLastMoveHit = false;
+	let _lastMoveX;
+	let _lastMoveY;
+
+	const changeLastMoveData = (hit, x, y) => {
+		_isLastMoveHit = hit;
+		_lastMoveX = x;
+		_lastMoveY = y;
+	};
 
 	const makeAttack = (gameboard) => {
 		// array of all not yet hit tiles (next time)
@@ -84,6 +90,12 @@ const computerPlayer = (function () {
 		// get coords
 		let x = _getRandomIntInclusive(0, 9);
 		let y = _getRandomIntInclusive(0, 9);
+
+		// if (_isLastMoveHit) {
+		// 	x = _lastMoveX;
+		// 	y = _lastMoveY;
+		// }
+
 		// check coords status
 		const status = gameboard.board[x][y].status;
 
@@ -163,7 +175,12 @@ const computerPlayer = (function () {
 
 	// randomize ships
 
-	return { gboard, makeAttack, randomize };
+	return {
+		changeLastMoveData,
+		gboard,
+		makeAttack,
+		randomize,
+	};
 })();
 
 export { humanPlayer, computerPlayer };

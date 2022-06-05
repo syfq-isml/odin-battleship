@@ -181,8 +181,8 @@ const RENDER_shipOnBoard = (arr) => {
 };
 
 const RENDER_shipSunk = (e) => {
-	const tile = e.target;
-	tile.classList.add("tile-sunk");
+	// const tile = e.target;
+	// tile.classList.add("tile-sunk");
 };
 
 const drawShip = (length, parent) => {
