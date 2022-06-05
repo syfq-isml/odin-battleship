@@ -76,6 +76,7 @@ const ANNOUNCE_shipHit = (player, str, shipSunk) => {
 		if (shipSunk) {
 			emph.innerText = "YOU SUNK A SHIP!";
 			ann.innerText = "You get another shot!";
+			return;
 		}
 
 		if (str === "A ship was hit!") {
@@ -110,6 +111,27 @@ const ANNOUNCE_shipMiss = (player, str) => {
 	ann.innerText = str;
 };
 
+const ANNOUNCE_placeShip = () => {
+	const ann = document.querySelector(".instructions p");
+	const emph = document.querySelector("#hitMiss");
+	emph.innerText = "";
+	ann.innerText = "Place your ships!";
+};
+
+const ANNOUNCE_newGame = () => {
+	const ann = document.querySelector(".instructions p");
+	const emph = document.querySelector("#hitMiss");
+	emph.innerText = "";
+	ann.innerText = "Make your first move!";
+};
+
+const ANNOUNCE_placeShip_ERROR = () => {
+	const ann = document.querySelector(".instructions p");
+	const emph = document.querySelector("#hitMiss");
+	emph.innerText = "";
+	ann.innerText = "Place ALL your ships first!";
+};
+
 const RENDER_shipHit = (e, image) => {
 	const tile = e.target;
 	// const img = document.createElement("img");
@@ -128,26 +150,34 @@ const RENDER_shipMiss = (e, image) => {
 	tile.classList.add("tile-miss");
 };
 
-// const RENDER_shipMiss_comp = (coords) => {
-// 	// find the tile that was hit (using coords)
-// 	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
-// 	tile.innerText = "o";
-// 	tile.classList.add("tile-miss");
-// };
+const RENDER_shipMiss_comp = (coords) => {
+	// find the tile that was hit (using coords)
+	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
+	tile.innerText = "o";
+	tile.classList.add("tile-miss");
+};
 
-// const RENDER_shipHit_comp = (coords) => {
-// 	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
-// 	tile.innerText = "X";
-// 	tile.classList.add("tile-hit");
-// };
+const RENDER_shipHit_comp = (coords) => {
+	const tile = document.querySelector(`[data-tile-id="${coords}"]`);
+	tile.innerText = "X";
+	tile.classList.add("tile-hit");
+};
 
 const RENDER_shipOnBoard = (arr) => {
+	reset();
 	arr.forEach((item) => {
 		item.forEach((coord) => {
 			const tile = document.querySelector(`[data-tile-id="${coord}"]`);
 			tile.classList.add("has-ship");
 		});
 	});
+
+	function reset() {
+		const boardTiles = document.querySelectorAll(".tile-content");
+		boardTiles.forEach((tile) => {
+			tile.classList.remove("has-ship");
+		});
+	}
 };
 
 const RENDER_shipSunk = (e) => {
@@ -417,6 +447,22 @@ const rotateModule = (function () {
 // 	});
 // }
 
+function appearPlayBtn(callback) {
+	if (humanPlayer.gboard.allShipsCoords.length === 6) {
+		const playBtn = document.querySelector("#play-btn");
+		playBtn.addEventListener("click", callback);
+	}
+}
+
+function isPlayable() {
+	const playBtn = document.querySelector("#play-btn");
+	console.log(humanPlayer.gboard.allShipsCoords.length);
+	if (humanPlayer.gboard.allShipsCoords.length === 6) {
+		playBtn.style.backgroundColor = "blue";
+	}
+	return;
+}
+
 export {
 	initGameboards,
 	addListenersToTiles,
@@ -426,13 +472,19 @@ export {
 	ANNOUNCE_shipHit,
 	ANNOUNCE_shipMiss,
 	ANNOUNCE_computerDelay,
+	ANNOUNCE_newGame,
+	ANNOUNCE_placeShip,
+	ANNOUNCE_placeShip_ERROR,
 	RENDER_shipHit,
 	RENDER_shipMiss,
+	RENDER_shipHit_comp,
+	RENDER_shipMiss_comp,
 	RENDER_shipOnBoard,
 	RENDER_shipSunk,
 	drawAllShips,
 	addEventListenerToShips,
 	removeEventListenerToShips,
+	isPlayable,
 	hoverModule,
 	rotateModule,
 };

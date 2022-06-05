@@ -1,17 +1,82 @@
+import { Ship } from "./shipFactory";
 import { gameboard } from "./gameboardFactory";
+import { getAllAvailableTiles, pickCoordinate } from "./coordinatePicker";
 
 const humanPlayer = (function () {
-	const gboard = gameboard();
+	let gboard = gameboard();
 
 	const makeAttack = (x, y, gameboard) => {
 		return gameboard.receiveAttack(x, y);
 	};
 
-	return { gboard, makeAttack };
+	const _getRandomIntInclusive = (min, max) => {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+	};
+
+	const _generateRandomOrientation = () => {
+		let result = _getRandomIntInclusive(0, 1);
+		if (result === 1) {
+			return "vertical";
+		}
+		return "horizontal";
+	};
+
+	const randomize = () => {
+		const Ship_5 = Ship(5);
+		const Ship_4 = Ship(4);
+		const Ship_3_1 = Ship(3);
+		const Ship_3_2 = Ship(3);
+		const Ship_2_1 = Ship(2);
+		const Ship_2_2 = Ship(2);
+
+		try {
+			let [x1, y1] = pickCoordinate();
+			gboard.placeShipOnGameboard(Ship_5, x1, y1, _generateRandomOrientation());
+
+			let [x2, y2] = pickCoordinate();
+			gboard.placeShipOnGameboard(Ship_4, x2, y2, _generateRandomOrientation());
+			// gboard.placeShipOnGameboard(
+			// 	Ship_3_1,
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_generateRandomOrientation()
+			// );
+			// gboard.placeShipOnGameboard(
+			// 	Ship_3_2,
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_generateRandomOrientation()
+			// );
+			// gboard.placeShipOnGameboard(
+			// 	Ship_2_1,
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_generateRandomOrientation()
+			// );
+			// gboard.placeShipOnGameboard(
+			// 	Ship_2_2,
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_getRandomIntInclusive(0, 9),
+			// 	_generateRandomOrientation()
+			// );
+		} catch (err) {
+			console.log(err);
+			gboard.removeAllShipData(); // wipe existing gameboard
+			randomize();
+		}
+	};
+
+	return { gboard, makeAttack, randomize };
 })();
 
 const computerPlayer = (function () {
 	const gboard = gameboard();
+
+	let isLastMoveHit = false;
+	let lastMoveX;
+	let lastMoveY;
 
 	const makeAttack = (gameboard) => {
 		// array of all not yet hit tiles (next time)
@@ -36,7 +101,69 @@ const computerPlayer = (function () {
 		return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
 	};
 
-	return { gboard, makeAttack };
+	const _generateRandomOrientation = () => {
+		let result = _getRandomIntInclusive(0, 1);
+		if (result === 1) {
+			return "vertical";
+		}
+		return "horizontal";
+	};
+
+	const randomize = () => {
+		const Ship_5 = Ship(5);
+		const Ship_4 = Ship(4);
+		const Ship_3_1 = Ship(3);
+		const Ship_3_2 = Ship(3);
+		const Ship_2_1 = Ship(2);
+		const Ship_2_2 = Ship(2);
+
+		try {
+			gboard.placeShipOnGameboard(
+				Ship_5,
+				_getRandomIntInclusive(0, 9),
+				_getRandomIntInclusive(0, 9),
+				_generateRandomOrientation()
+			);
+			gboard.placeShipOnGameboard(
+				Ship_4,
+				_getRandomIntInclusive(0, 9),
+				_getRandomIntInclusive(0, 9),
+				_generateRandomOrientation()
+			);
+			gboard.placeShipOnGameboard(
+				Ship_3_1,
+				_getRandomIntInclusive(0, 9),
+				_getRandomIntInclusive(0, 9),
+				_generateRandomOrientation()
+			);
+			gboard.placeShipOnGameboard(
+				Ship_3_2,
+				_getRandomIntInclusive(0, 9),
+				_getRandomIntInclusive(0, 9),
+				_generateRandomOrientation()
+			);
+			gboard.placeShipOnGameboard(
+				Ship_2_1,
+				_getRandomIntInclusive(0, 9),
+				_getRandomIntInclusive(0, 9),
+				_generateRandomOrientation()
+			);
+			gboard.placeShipOnGameboard(
+				Ship_2_2,
+				_getRandomIntInclusive(0, 9),
+				_getRandomIntInclusive(0, 9),
+				_generateRandomOrientation()
+			);
+		} catch (err) {
+			console.log(err);
+			gboard = gameboard(); // wipe existing gameboard
+			randomize();
+		}
+	};
+
+	// randomize ships
+
+	return { gboard, makeAttack, randomize };
 })();
 
 export { humanPlayer, computerPlayer };

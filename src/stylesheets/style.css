@@ -74,6 +74,7 @@ header {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	font-family: "Press Start 2P", cursive;
 }
 
 [data-player="computer"] {
@@ -110,6 +111,8 @@ header {
 	height: 70px;
 	align-self: center;
 	font-family: "Press Start 2P", cursive;
+	background-color: rgb(90, 90, 251);
+	color: white;
 }
 
 #ship-container {
@@ -166,7 +169,7 @@ header {
 }
 
 .tile-sunk {
-	background-color: rgb(52, 52, 52);
+	background-color: rgb(85, 11, 11);
 }
 
 /* --- CSS MAGIC --- */

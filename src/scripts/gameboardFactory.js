@@ -51,6 +51,11 @@ const gameboard = function () {
 
 	let _allShipsCoords = [];
 
+	const removeAllShipData = () => {
+		_allShips.splice(0, _allShips.length);
+		_allShipsCoords.splice(0, _allShipsCoords.length);
+	};
+
 	const placeShipOnGameboard = function (shipObj, x, y, orientation) {
 		// given x, y coords, set ship to position on the gameboard
 		// coords start with [0,0]
@@ -132,6 +137,10 @@ const gameboard = function () {
 		return ship.isSunk();
 	};
 
+	const whichShipIsSunk = (x, y) => {
+		const nameOfShip = _board[x][y].shipName;
+	};
+
 	// const getAllAvailableTiles = () => {
 	// 	let arr = [];
 	// 	for (let i = 0; i < 10; i++) {
@@ -153,6 +162,7 @@ const gameboard = function () {
 			return _allShipsCoords;
 		},
 		placeShipOnGameboard,
+		removeAllShipData,
 		receiveAttack,
 		isAllSunk,
 		isShipSunk,

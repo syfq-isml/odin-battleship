@@ -10,13 +10,19 @@ import {
 	ANNOUNCE_shipHit,
 	ANNOUNCE_shipMiss,
 	ANNOUNCE_computerDelay,
+	ANNOUNCE_newGame,
+	ANNOUNCE_placeShip,
+	ANNOUNCE_placeShip_ERROR,
 	RENDER_shipHit,
 	RENDER_shipMiss,
+	RENDER_shipHit_comp,
+	RENDER_shipMiss_comp,
 	RENDER_shipOnBoard,
 	RENDER_shipSunk,
 	drawAllShips,
 	addEventListenerToShips,
 	removeEventListenerToShips,
+	isPlayable,
 	hoverModule,
 	rotateModule,
 } from "./scripts/DOMmodule";
@@ -25,16 +31,31 @@ import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
 
 initGameboards();
 drawAllShips();
+ANNOUNCE_placeShip();
 // addeventlistener to placer ( e is on ships)
 // addeventlistner to board ( e is on board )
 
-runNewGame();
-RENDER_shipOnBoard(humanPlayer.gboard.allShipsCoords);
-console.log(humanPlayer.gboard.allShipsCoords);
+const playBtn = document.querySelector("#play-btn");
+playBtn.addEventListener("click", runNewGame);
+document.body.addEventListener("click", isPlayable);
 
 function runNewGame() {
-	// spawnShips(humanPlayer);
-	spawnShips(computerPlayer);
+	if (humanPlayer.gboard.allShipsCoords.length === 6) {
+		spawnShips(computerPlayer);
+
+		const shipPlacer = document.querySelector("#ship-placer");
+		shipPlacer.style.display = "none";
+
+		document.body.removeEventListener("click", isPlayable);
+
+		const computerBoard = document.querySelector(".computer-side");
+		computerBoard.classList.remove("hidden");
+		console.log("removed hidden");
+		ANNOUNCE_newGame();
+		removeEventListenerToShips(placement_part1);
+	} else {
+		ANNOUNCE_placeShip_ERROR();
+	}
 }
 
 // SET-UP TIME
@@ -48,12 +69,17 @@ function handleHumanClick(e) {
 	console.log(e.target);
 	let [x, y, result] = DOM_attack(e);
 
+	x = +x;
+	y = +y;
+
 	if (result === "A ship was hit!") {
 		RENDER_shipHit(e);
 
-		if (humanPlayer.gboard.isShipSunk(x, y)) {
+		console.log(humanPlayer.gboard.board);
+
+		if (computerPlayer.gboard.isShipSunk(x, y)) {
 			ANNOUNCE_shipHit("human", result, true);
-			RENDER_shipSunk();
+			RENDER_shipSunk(e);
 		} else {
 			ANNOUNCE_shipHit("human", result, false);
 		}
@@ -68,17 +94,26 @@ function handleHumanClick(e) {
 
 	if (result === "Missed...") {
 		RENDER_shipMiss(e);
-		ANNOUNCE_shipHit("human", result);
+		ANNOUNCE_shipHit("human", result, false);
 	}
 
 	function computerMove() {
 		let resultArr = computerPlayer.makeAttack(humanPlayer.gboard);
 		console.log(resultArr);
 		let [x, y, compResult] = resultArr;
-		console.log(x, y, compResult);
+
+		x = +x;
+		y = +y;
+
 		if (compResult === "A ship was hit!") {
 			RENDER_shipHit_comp(`${x}${y}`);
-			ANNOUNCE_shipHit("computer", compResult);
+
+			if (humanPlayer.gboard.isShipSunk(x, y)) {
+				ANNOUNCE_shipHit("computer", compResult, true);
+				RENDER_shipSunk(e);
+			} else {
+				ANNOUNCE_shipHit("computer", compResult, false);
+			}
 
 			if (humanPlayer.gboard.isAllSunk()) {
 				ANNOUNCE_gameOver("lose");
@@ -91,7 +126,7 @@ function handleHumanClick(e) {
 
 		if (compResult === "Missed...") {
 			RENDER_shipMiss_comp(`${x}${y}`);
-			ANNOUNCE_shipHit("computer", compResult);
+			ANNOUNCE_shipHit("computer", compResult, false);
 		}
 
 		return "Next player";
