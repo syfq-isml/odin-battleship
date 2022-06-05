@@ -18,10 +18,10 @@
             <div id="main-wrapper">
                 <section id="instructions-area">
                     <div class="instructions">
-                        <p>Awaiting attack by computer...</p>
+                        <span id="hitMiss"></span><p>Make your first move! Click on any tile.</p>
                     </div>
                 </section>
-                <section id="game-area">
+                <section id="game-area" class="setup-gameboard">
                     <div class="player-side">
                         <div class="gameboard-container">
                             <div id="player-gameboard">
@@ -32,7 +32,25 @@
                             <h2>Your Board</h2>
                         </div>
                     </div>
-                    <div class="computer-side">
+
+                    <div id="ship-placer">
+                        <h2>Place your ships on your board!</h2>
+                        <div>
+                            <p>Click on the ship you want to place, then click on your board again to place it.</p>
+                            <p>Press 'R' on your keyboard to rotate your ship.</p>
+                        </div>
+                        <div id="ship-container">
+                            <div id="ship5" class="placing-ships" draggable="true"></div>
+                            <div id="ship4" class="placing-ships" draggable="true"></div>
+                            <div id="ship3-1" class="placing-ships" draggable="true"></div>
+                            <div id="ship3-2" class="placing-ships" draggable="true"></div>
+                            <div id="ship2-1" class="placing-ships" draggable="true"></div>
+                            <div id="ship2-2" class="placing-ships" draggable="true"></div>
+                        </div>
+                        <button type="button" id="play-btn">PLAY</button>
+                    </div>
+
+                    <div class="computer-side hidden">
                         <div class="gameboard-container">
                             <div id="computer-gameboard">
                                 
