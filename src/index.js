@@ -159,6 +159,8 @@ function spawnShips(player) {
 }
 
 function placement_part1(e) {
+	if (e.target.getAttribute("data-already-placed") === "true") return;
+
 	const selectedShip = document.querySelectorAll(
 		`[data-placer-name="${e.target.dataset.placerName}"]`
 	);
@@ -167,6 +169,7 @@ function placement_part1(e) {
 
 	selectedShip.forEach((block) => {
 		block.classList.add("selected");
+		block.setAttribute("data-already-placed", "true");
 	});
 
 	hoverModule.changeLength(length);
