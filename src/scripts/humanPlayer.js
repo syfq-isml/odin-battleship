@@ -101,8 +101,10 @@ const computerPlayer = (function () {
 
 		// not hit yet - hit it
 		if (status === "not hit yet") {
+			// changeLastMoveData(true, x, y);
 			return [x, y, gameboard.receiveAttack(x, y)];
 		} else {
+			// changeLastMoveData(false, x, y);
 			return makeAttack(gameboard);
 		}
 	};
@@ -141,7 +143,6 @@ const computerPlayer = (function () {
 					_getRandomIntInclusive(0, 9),
 					_generateRandomOrientation()
 				);
-				// allShipsIn++;
 			} catch (err) {
 				console.log(err);
 			}
