@@ -122,6 +122,8 @@ const computerPlayer = (function () {
 	};
 
 	const randomize = () => {
+		const r_ships = [];
+
 		const Ship_5 = Ship(5);
 		const Ship_4 = Ship(4);
 		const Ship_3_1 = Ship(3);
@@ -129,48 +131,64 @@ const computerPlayer = (function () {
 		const Ship_2_1 = Ship(2);
 		const Ship_2_2 = Ship(2);
 
-		try {
-			gboard.placeShipOnGameboard(
-				Ship_5,
-				_getRandomIntInclusive(0, 9),
-				_getRandomIntInclusive(0, 9),
-				_generateRandomOrientation()
-			);
-			gboard.placeShipOnGameboard(
-				Ship_4,
-				_getRandomIntInclusive(0, 9),
-				_getRandomIntInclusive(0, 9),
-				_generateRandomOrientation()
-			);
-			gboard.placeShipOnGameboard(
-				Ship_3_1,
-				_getRandomIntInclusive(0, 9),
-				_getRandomIntInclusive(0, 9),
-				_generateRandomOrientation()
-			);
-			gboard.placeShipOnGameboard(
-				Ship_3_2,
-				_getRandomIntInclusive(0, 9),
-				_getRandomIntInclusive(0, 9),
-				_generateRandomOrientation()
-			);
-			gboard.placeShipOnGameboard(
-				Ship_2_1,
-				_getRandomIntInclusive(0, 9),
-				_getRandomIntInclusive(0, 9),
-				_generateRandomOrientation()
-			);
-			gboard.placeShipOnGameboard(
-				Ship_2_2,
-				_getRandomIntInclusive(0, 9),
-				_getRandomIntInclusive(0, 9),
-				_generateRandomOrientation()
-			);
-		} catch (err) {
-			console.log(err);
-			gboard = gameboard(); // wipe existing gameboard
-			randomize();
+		r_ships.push(Ship_5, Ship_4, Ship_3_1, Ship_3_2, Ship_2_1, Ship_2_2);
+
+		while (gboard.allShips.length < 6) {
+			try {
+				gboard.placeShipOnGameboard(
+					r_ships[gboard.allShips.length],
+					_getRandomIntInclusive(0, 9),
+					_getRandomIntInclusive(0, 9),
+					_generateRandomOrientation()
+				);
+				// allShipsIn++;
+			} catch (err) {
+				console.log(err);
+			}
 		}
+
+		// try {
+		// 	gboard.placeShipOnGameboard(
+		// 		Ship_5,
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_generateRandomOrientation()
+		// 	);
+		// 	gboard.placeShipOnGameboard(
+		// 		Ship_4,
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_generateRandomOrientation()
+		// 	);
+		// 	gboard.placeShipOnGameboard(
+		// 		Ship_3_1,
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_generateRandomOrientation()
+		// 	);
+		// 	gboard.placeShipOnGameboard(
+		// 		Ship_3_2,
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_generateRandomOrientation()
+		// 	);
+		// 	gboard.placeShipOnGameboard(
+		// 		Ship_2_1,
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_generateRandomOrientation()
+		// 	);
+		// 	gboard.placeShipOnGameboard(
+		// 		Ship_2_2,
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_getRandomIntInclusive(0, 9),
+		// 		_generateRandomOrientation()
+		// 	);
+		// } catch (err) {
+		// 	console.log(err);
+		// 	gboard = gameboard(); // wipe existing gameboard
+		// 	randomize();
+		// }
 	};
 
 	// randomize ships

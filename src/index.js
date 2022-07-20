@@ -41,7 +41,8 @@ document.body.addEventListener("click", isPlayable);
 
 function runNewGame() {
 	if (humanPlayer.gboard.allShipsCoords.length === 6) {
-		spawnShips(computerPlayer);
+		// spawnShips(computerPlayer);
+		computerPlayer.randomize();
 
 		const shipPlacer = document.querySelector("#ship-placer");
 		shipPlacer.style.display = "none";

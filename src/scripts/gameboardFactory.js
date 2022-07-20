@@ -161,6 +161,9 @@ const gameboard = function () {
 		get allShipsCoords() {
 			return _allShipsCoords;
 		},
+		get allShips() {
+			return _allShips;
+		},
 		placeShipOnGameboard,
 		removeAllShipData,
 		receiveAttack,
