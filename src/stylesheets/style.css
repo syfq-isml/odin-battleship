@@ -27,6 +27,46 @@ header {
 	font-size: 60px;
 }
 
+#game-modal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	font-size: 2rem;
+	padding: 2rem;
+	border: 0.5rem solid white;
+	border-radius: 5px;
+
+	color: white;
+	background-color: black;
+}
+
+#game-modal::backdrop {
+	background-color: rgba(0, 0, 0, 0.388);
+}
+
+#game-modal_content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	gap: 10px;
+}
+
+#game-modal_btn {
+	border: 0;
+	padding: 0.5rem 1rem;
+	font-size: 1rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1rem;
+
+	font-family: "Press Start 2P", cursive;
+	background-color: blue;
+	color: white;
+}
+
 #instructions-area {
 	display: flex;
 	justify-content: center;
@@ -148,6 +188,11 @@ header {
 
 .has-ship-shadow {
 	background-color: rgba(0, 0, 255, 0.491);
+}
+
+.has-ship-shadow--invalid {
+	background-color: rgba(182, 13, 13, 0.616);
+	content: "x";
 }
 
 .unavailable {

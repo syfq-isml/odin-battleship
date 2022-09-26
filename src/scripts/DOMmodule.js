@@ -310,6 +310,7 @@ const hoverModule = (function () {
 		const tile = document.querySelectorAll(".has-ship-shadow");
 		tile.forEach((tile) => {
 			tile.classList.remove("has-ship-shadow");
+			tile.classList.remove("has-ship-shadow--invalid");
 		});
 	}
 
@@ -318,7 +319,7 @@ const hoverModule = (function () {
 		let [x, y] = coords.split("");
 		if (_orientation === "vertical") {
 			for (let i = +x; i < +x + _length; i++) {
-				if (+x < 0 || +x > 9 || +x + _length - 1 > 9) continue;
+				if (i > 9) continue;
 
 				const tile = document.querySelector(`[data-tile-id="${i}${+y}"]`);
 				// console.log(length);

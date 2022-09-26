@@ -26,6 +26,7 @@ import {
 	hoverModule,
 	rotateModule,
 } from "./scripts/DOMmodule";
+import { dialogController } from "./scripts/dialog";
 import { Ship } from "./scripts/shipFactory";
 import { humanPlayer, computerPlayer } from "./scripts/humanPlayer";
 
@@ -190,24 +191,28 @@ function placement_part1(e) {
 	});
 
 	function placement_part2(e) {
-		const coords = e.target.dataset.tileId;
-		p_spawnShips(length, coords, rotateModule.orientation);
-		RENDER_shipOnBoard(humanPlayer.gboard.allShipsCoords);
+		try {
+			const coords = e.target.dataset.tileId;
+			p_spawnShips(length, coords, rotateModule.orientation);
+			RENDER_shipOnBoard(humanPlayer.gboard.allShipsCoords);
 
-		selectedShip.forEach((block) => {
-			console.log("Called");
-			block.removeEventListener("click", placement_part1);
-			block.removeEventListener("click", placement_part2);
-		});
+			selectedShip.forEach((block) => {
+				console.log("Called");
+				block.removeEventListener("click", placement_part1);
+				block.removeEventListener("click", placement_part2);
+			});
 
-		boardTiles.forEach((tile) => {
-			tile.removeEventListener("click", placement_part2);
-		});
-		otherShips.forEach((ship) => {
-			ship.addEventListener("click", placement_part1);
-		});
+			boardTiles.forEach((tile) => {
+				tile.removeEventListener("click", placement_part2);
+			});
+			otherShips.forEach((ship) => {
+				ship.addEventListener("click", placement_part1);
+			});
 
-		hoverModule.removeEffect();
+			hoverModule.removeEffect();
+		} catch (err) {
+			dialogController.openDialog();
+		}
 	}
 }
 

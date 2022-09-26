@@ -9,6 +9,12 @@
 </head>
 <body>
     <div id="overall-wrapper">
+        <dialog id="game-modal">
+            <div id="game-modal_content">
+                <p>Can't place ship here!</p>
+                <button type="button" id="game-modal_btn">Close</button>
+            </div>
+        </dialog>
         <header>
             <div id="logo">
                 <h1>BATTLESHIPS</h1>
@@ -22,6 +28,7 @@
                     </div>
                 </section>
                 <section id="game-area" class="setup-gameboard">
+                    
                     <div class="player-side">
                         <div class="gameboard-container">
                             <div id="player-gameboard">
