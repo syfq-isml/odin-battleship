@@ -310,7 +310,6 @@ const hoverModule = (function () {
 		const tile = document.querySelectorAll(".has-ship-shadow");
 		tile.forEach((tile) => {
 			tile.classList.remove("has-ship-shadow");
-			tile.classList.remove("has-ship-shadow--invalid");
 		});
 	}
 
@@ -333,7 +332,7 @@ const hoverModule = (function () {
 
 		if (_orientation === "horizontal") {
 			for (let j = +y; j < +y + _length; j++) {
-				if (+y + _length - 1 > 9 || +y > 9 || +y < 0) continue;
+				if (y > 9) continue;
 
 				const tile = document.querySelector(`[data-tile-id="${+x}${j}"]`);
 				tile.classList.add("has-ship-shadow");
