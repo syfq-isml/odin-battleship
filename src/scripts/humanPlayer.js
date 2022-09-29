@@ -123,7 +123,7 @@ const computerPlayer = (function () {
 
 			return [x, y, result];
 		} else {
-			makeAttack();
+			return makeAttack();
 		}
 	};
 
@@ -159,7 +159,7 @@ const computerPlayer = (function () {
 		}
 
 		// if everything is attacked alr, then random attack
-		makeAttack();
+		return makeAttack();
 	};
 
 	const attackSameDirection = () => {
@@ -182,7 +182,7 @@ const computerPlayer = (function () {
 
 			return [x, y, result];
 		} else {
-			makeAttack();
+			return makeAttack();
 		}
 	};
 
@@ -207,7 +207,7 @@ const computerPlayer = (function () {
 
 			return [x, y, result];
 		} else {
-			makeAttack();
+			return makeAttack();
 		}
 	};
 
