@@ -81,7 +81,6 @@ function handleHumanClick(e) {
 
 		if (computerPlayer.gboard.isShipSunk(x, y)) {
 			ANNOUNCE_shipHit("human", result, true);
-			RENDER_shipSunk(e);
 		} else {
 			ANNOUNCE_shipHit("human", result, false);
 		}
@@ -99,8 +98,19 @@ function handleHumanClick(e) {
 		ANNOUNCE_shipHit("human", result, false);
 	}
 
+	removeListenersFromTiles(handleHumanClick);
+	console.log("removed listeners");
+
+	//------------------ COMPUTER'S MOVE --------------
+
+	setTimeout(ANNOUNCE_computerDelay, 2000);
+
+	setTimeout(computerMove, 4000);
+
 	function computerMove() {
-		let resultArr = computerPlayer.makeAttack(humanPlayer.gboard);
+		const { currentResult, decisionMap, changeCurrentResult } = computerPlayer;
+		let resultArr = decisionMap.get(currentResult)();
+
 		console.log(resultArr);
 		let [x, y, compResult] = resultArr;
 
@@ -109,11 +119,10 @@ function handleHumanClick(e) {
 
 		if (compResult === "A ship was hit!") {
 			RENDER_shipHit_comp(`${x}${y}`);
-			computerPlayer.changeLastMoveData(true, x, y);
 
 			if (humanPlayer.gboard.isShipSunk(x, y)) {
 				ANNOUNCE_shipHit("computer", compResult, true);
-				RENDER_shipSunk(e);
+				changeCurrentResult("");
 			} else {
 				ANNOUNCE_shipHit("computer", compResult, false);
 			}
@@ -124,24 +133,17 @@ function handleHumanClick(e) {
 			}
 
 			setTimeout(ANNOUNCE_computerDelay, 2000);
-			return setTimeout(computerMove, 4000);
+			setTimeout(computerMove, 4000);
+			return;
 		}
 
 		if (compResult === "Missed...") {
 			RENDER_shipMiss_comp(`${x}${y}`);
 			ANNOUNCE_shipHit("computer", compResult, false);
-			computerPlayer.changeLastMoveData(false, x, y);
 		}
 
-		return "Next player";
+		setTimeout(addListenersToTiles, 1000, handleHumanClick);
 	}
-
-	removeListenersFromTiles(handleHumanClick);
-	console.log("removed listeners");
-
-	setTimeout(ANNOUNCE_computerDelay, 2000);
-	setTimeout(computerMove, 4000);
-	setTimeout(addListenersToTiles, 5000, handleHumanClick);
 }
 
 function spawnShips(player) {

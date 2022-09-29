@@ -105,7 +105,7 @@ const gameboard = function () {
 		// find the ship
 		// call hit(x-coord, y-coord) with
 		// NO - show that it is a miss
-		if (!_checkIfNotYetHit(x, y)) throw `${_board[x][y].status}`;
+		if (!checkIfNotYetHit(x, y)) throw `${_board[x][y].status}`;
 
 		if (_board[x][y].isShip) {
 			const shipHit = _allShips.find(
@@ -120,7 +120,7 @@ const gameboard = function () {
 		}
 	};
 
-	const _checkIfNotYetHit = (x, y) => {
+	const checkIfNotYetHit = (x, y) => {
 		if (_board[x][y].status === "not hit yet") return true;
 		return false;
 	};
@@ -164,6 +164,7 @@ const gameboard = function () {
 		get allShips() {
 			return _allShips;
 		},
+		checkIfNotYetHit,
 		placeShipOnGameboard,
 		removeAllShipData,
 		receiveAttack,
